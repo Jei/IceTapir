@@ -1,0 +1,27 @@
+{
+  "name": "icetapir",
+  "version": "1.0.0",
+  "description": "A Telegram bot that handles Icecast2/Liquidsoap music streams.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Jei/IceTapir.git"
+  },
+  "keywords": [
+    "telegram",
+    "icecast",
+    "icecast2",
+    "liquidsoap",
+    "music",
+    "node"
+  ],
+  "author": "Andrea Jonus",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jei/IceTapir/issues"
+  },
+  "homepage": "https://github.com/Jei/IceTapir#readme"
+}
