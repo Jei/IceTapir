@@ -1,0 +1,14 @@
+{
+  "icecast": {
+    "host": "<ICECAST SERVER URL>",
+    "port": <ICECAST SERVER PORT>,
+    "user": "<ICECAST SERVER ADMIN USERNAME>",
+    "password": "<ICECAST SERVER ADMIN PASSWORD>"
+  },
+  "telegram": {
+    "token": "<TELEGRAM BOT TOKEN>",
+    "options": {
+      "polling": true
+    }
+  }
+}
