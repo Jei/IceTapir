@@ -30,6 +30,7 @@
   "homepage": "https://github.com/Jei/IceTapir#readme",
   "dependencies": {
     "icecast-monitor": "^1.0.2",
+    "mongoose": "^4.13.6",
     "tgfancy": "^0.12.0",
     "underscore": "^1.8.3"
   },

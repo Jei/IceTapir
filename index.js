@@ -21,6 +21,6 @@ const _ = require('underscore');
   };
 });
 
-// Initialize 
+// Initialize
 global.Telegram = new IODriver(config.telegram);
 global.Icecast = new AudioServer(config.icecast);
