@@ -24,3 +24,4 @@ const _ = require('underscore');
 // Initialize
 global.Telegram = new IODriver(config.telegram);
 global.Icecast = new AudioServer(config.icecast);
+global.Memory = require('./memory');
