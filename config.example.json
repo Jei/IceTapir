@@ -1,14 +1,22 @@
 {
   "icecast": {
-    "host": "<ICECAST SERVER URL>",
-    "port": <ICECAST SERVER PORT>,
-    "user": "<ICECAST SERVER ADMIN USERNAME>",
-    "password": "<ICECAST SERVER ADMIN PASSWORD>"
+    "host": "example.org", // Icecast server URL
+    "port": 26000, // The listening port of the Icecast server
+    "user": "admin", // The username of the Icecast server's admin
+    "password": "hackme"
   },
   "telegram": {
-    "token": "<TELEGRAM BOT TOKEN>",
+    "token": "123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11", // Telegram bot token
     "options": {
       "polling": true
     }
-  }
+  },
+  // This is a list of users that the bot automatically creates at startup 
+  "users": [
+    {
+      "username": "J E I", // A custom username
+      "telegram_id": 1234567, // The id of the Telegram account of this user
+      "group": "admins" // The role for this user. Can be one of ["admins","listeners","outsiders"]. Defaults to "outsiders".
+    }
+  ]
 }

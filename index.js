@@ -1,6 +1,7 @@
 const config = require('./config.json');
 const IODriver = require('./io/telegram');
 const AudioServer = require('./lib/icecast');
+const MemoryDriver = require('./memory');
 const _ = require('underscore');
 
 // Console log helper
@@ -24,4 +25,42 @@ const _ = require('underscore');
 // Initialize
 global.Telegram = new IODriver(config.telegram);
 global.Icecast = new AudioServer(config.icecast);
-global.Memory = require('./memory');
+global.Memory = new MemoryDriver(config);
+
+Telegram.on('start', async (msg) => {
+  try {
+    await Memory.models.TelegramUser
+    .findOneAndUpdate(
+      { id: id },
+      { ...msg.from },
+      { upsert: true, setDefaultsOnInsert: true, new: true }
+      )
+    .exec();
+  } catch(err) {
+    console.error(err);
+  }
+});
+
+Telegram.on('message', async (msg) => {
+  const { id } = msg.from;
+  let tUser;
+
+  try {
+    tUser = await Memory.models.TelegramUser
+      .findOneAndUpdate(
+        { id: id },
+        { ...msg.from },
+        { upsert: true, setDefaultsOnInsert: true, new: true }
+      )
+      .populate('user')
+      .exec();
+  } catch(err) {
+    console.error(err);
+  }
+
+  try {
+    Telegram.output(tUser.id, (tUser.isAdmin() ? 'You are an admin, ' : 'You are NOT an admin, ') + tUser.getPrettyName());
+  } catch(err) {
+    console.error(err);
+  }
+});
