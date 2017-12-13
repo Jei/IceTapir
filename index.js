@@ -23,6 +23,7 @@ const _ = require('underscore');
 });
 
 // Initialize
+global.__basedir = __dirname;
 global.Telegram = new IODriver(config.telegram);
 global.Icecast = new AudioServer(config.icecast);
 global.Memory = new MemoryDriver(config);
@@ -41,6 +42,7 @@ Telegram.on('start', async (msg) => {
   }
 });
 
+// TODO move in a separate handler
 Telegram.on('message', async (msg) => {
   const { id } = msg.from;
   let tUser;
@@ -58,9 +60,32 @@ Telegram.on('message', async (msg) => {
     console.error(err);
   }
 
-  try {
-    Telegram.output(tUser.id, (tUser.isAdmin() ? 'You are an admin, ' : 'You are NOT an admin, ') + tUser.getPrettyName());
-  } catch(err) {
-    console.error(err);
+  // TODO standard response message
+  if (tUser.user == null) return;
+
+  // TODO check user's group
+  // TODO execute only the first command?
+  if (msg.entities) {
+    msg.entities.forEach(async (entity) => {
+      if (entity.type != 'bot_command') return;
+
+      let result;
+
+      try {
+        const commandName = msg.text.substr(entity.offset+1, entity.length-1);
+        const command = new (require('./commands/' + commandName))();
+
+        // TODO standard response message
+        if (!command.canRun(tUser.user.group)) {
+          console.warn(`Telegram user "${tUser.username}" (${tUser.id}) called the command "${commandName}" but is not authorized.`);
+          return;
+        }
+
+        result = await command.run();
+        await Telegram.output(tUser.id, result);
+      } catch(err) {
+        console.error(err);
+      }
+    });
   }
 });
