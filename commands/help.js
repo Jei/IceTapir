@@ -2,7 +2,7 @@
 * @Author: Jei
 * @Date:   2017-12-13 09:55:33
 * @Last Modified by:   Jei
-* @Last Modified time: 2017-12-13 16:59:32
+* @Last Modified time: 2017-12-14 15:51:52
 */
 
 const fs = require('fs');
@@ -27,7 +27,7 @@ class Help extends require('./command') {
       fs.readdir(__basedir + '/commands/', (err, content) => {
         if (err) return reject(err);
 
-        let descriptions = [];
+        let parts = ['⚙ *Commands:*\n'];
 
         try {
           content.forEach(file => {
@@ -35,21 +35,26 @@ class Help extends require('./command') {
             const commandName = file.replace('.js','');
             const command = new (require('./' + commandName))();
 
-            if (!command.canRun(this.user.group || 'outsiders')) return;
+            if (!command.canRun(this.user.level)) return;
 
-            descriptions.push(this.__prettifyDescription(commandName, command.getDescription()));
+            parts.push(this.__prettifyDescription(commandName, command.getDescription()));
           });
         } catch(err) {
           return reject(err);
         }
 
-        resolve(descriptions.join('\n'));
+        resolve({
+          msg: parts.join('\n'),
+          opts: {
+            parse_mode: 'Markdown',
+          }
+        });
       });
     });
   }
 
-  getGroups() {
-    return ['admins','listeners','outsiders'];
+  getLevel() {
+    return 0;
   }
 
   getDescription() {

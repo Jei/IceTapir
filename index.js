@@ -70,15 +70,10 @@ Telegram.on('message', async (msg) => {
         const commandName = msg.text.substr(entity.offset+1, entity.length-1);
         const command = new (require('./commands/' + commandName))();
 
-        // TODO standard response message
-        if (!command.canRun(user.group)) {
-          console.warn(`Telegram user "${tUser.username}" (${tUser.id}) called the command "${commandName}" but is not authorized.`);
-          return;
-        }
-
         result = await command.run();
-        await Telegram.output(tUser.id, result);
+        await Telegram.output(tUser.id, result.msg, result.opts);
       } catch(err) {
+        // TODO standard response message
         console.error(err);
       }
     });

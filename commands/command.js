@@ -2,7 +2,7 @@
 * @Author: Jei
 * @Date:   2017-12-13 09:52:41
 * @Last Modified by:   Jei
-* @Last Modified time: 2017-12-13 16:59:32
+* @Last Modified time: 2017-12-14 15:52:00
 */
 
 class Command {
@@ -21,13 +21,13 @@ class Command {
   }
 
   /**
-   * Validate the current user's group and run this command's routine
+   * Validate the current user's level and run this command's routine
    * @return {Promise} [description]
    */
   run() {
-    const { username, group } = this.user || {};
+    const { username, level } = this.user || {};
 
-    if (!this.canRun(group)) {
+    if (!this.canRun(level)) {
       console.warn(`User "${username}" called the command "${commandName}" but is not authorized.`);
       return Promise.reject('Unauthorized');
     }
@@ -44,20 +44,20 @@ class Command {
   }
 
   /**
-   * Get a list of the groups that can run this command
-   * @return {String[]} A list of group names
+   * Get the minimum security level needed to run this command
+   * @return {Number}
    */
-  getGroups() {
-    return ['admins'];
+  getLevel() {
+    return 0;
   }
 
   /**
-   * Check if this command can be run by the given group
+   * Check if this command can be run by the given level
    * @property {String} [group="outsiders"] The group to check this command against
    * @return {Boolean}
    */
-  canRun(group = 'outsiders') {
-    return this.getGroups().indexOf(group) >= 0;
+  canRun(level = 0) {
+    return level >= this.getLevel();
   }
 
   /**
