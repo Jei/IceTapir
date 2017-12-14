@@ -2,20 +2,17 @@
 * @Author: Jei
 * @Date:   2017-12-13 09:55:33
 * @Last Modified by:   Jei
-* @Last Modified time: 2017-12-14 15:51:52
+* @Last Modified time: 2017-12-14 16:13:22
 */
 
 const fs = require('fs');
 
 class Help extends require('./command') {
-  constructor(cfg) {
-    super();
-    cfg = cfg || {};
+  constructor(cfg = {}) {
+    super(cfg);
 
     // TODO better command symbol handling
     this.commandSymbol = cfg.commandSymbol || '/';
-    // TODO 
-    this.user = cfg.user || {};
   }
 
   __prettifyDescription(name, description) {

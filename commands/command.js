@@ -2,11 +2,11 @@
 * @Author: Jei
 * @Date:   2017-12-13 09:52:41
 * @Last Modified by:   Jei
-* @Last Modified time: 2017-12-14 15:52:00
+* @Last Modified time: 2017-12-14 16:13:30
 */
 
 class Command {
-  constructor() {
+  constructor(cfg = { user: {} }) {
     if (this.constructor === Command) {
       throw new TypeError('Cannot construct abstract class.');
     }
@@ -18,6 +18,8 @@ class Command {
     if (this.getDescription === Command.prototype.getDescription) {
       throw new TypeError('Please implement abstract method "getDescription".');
     }
+
+    this.user = cfg.user;
   }
 
   /**

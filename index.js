@@ -68,7 +68,7 @@ Telegram.on('message', async (msg) => {
 
       try {
         const commandName = msg.text.substr(entity.offset+1, entity.length-1);
-        const command = new (require('./commands/' + commandName))();
+        const command = new (require('./commands/' + commandName))({ user });
 
         result = await command.run();
         await Telegram.output(tUser.id, result.msg, result.opts);
