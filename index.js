@@ -30,13 +30,8 @@ global.Memory = new MemoryDriver(config);
 
 Telegram.on('start', async (msg) => {
   try {
-    await Memory.models.TelegramUser
-    .findOneAndUpdate(
-      { id: id },
-      { ...msg.from },
-      { upsert: true, setDefaultsOnInsert: true, new: true }
-      )
-    .exec();
+    const tUser = await Memory.updateTelegramUser(msg.from, { upsert: true });
+    console.info('Telegram user', tUser, 'started the bot.');
   } catch(err) {
     console.error(err);
   }
@@ -46,24 +41,24 @@ Telegram.on('start', async (msg) => {
 Telegram.on('message', async (msg) => {
   const { id } = msg.from;
   let tUser;
+  let user;
 
   try {
-    tUser = await Memory.models.TelegramUser
-      .findOneAndUpdate(
-        { id: id },
-        { ...msg.from },
-        { upsert: true, setDefaultsOnInsert: true, new: true }
-      )
-      .populate('user')
-      .exec();
+    tUser = await Memory.models.TelegramUser.findOne({ id: id }).exec();
   } catch(err) {
+    // TODO standard response message
     console.error(err);
+    return;
   }
 
-  // TODO standard response message
-  if (tUser.user == null) return;
+  try {
+    user = await Memory.models.User.findOne({ telegram: tUser._id }).exec();
+  } catch(err) {
+    // TODO standard response message
+    console.error(err);
+    return;
+  }
 
-  // TODO check user's group
   // TODO execute only the first command?
   if (msg.entities) {
     msg.entities.forEach(async (entity) => {
@@ -76,7 +71,7 @@ Telegram.on('message', async (msg) => {
         const command = new (require('./commands/' + commandName))();
 
         // TODO standard response message
-        if (!command.canRun(tUser.user.group)) {
+        if (!command.canRun(user.group)) {
           console.warn(`Telegram user "${tUser.username}" (${tUser.id}) called the command "${commandName}" but is not authorized.`);
           return;
         }

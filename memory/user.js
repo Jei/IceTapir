@@ -2,7 +2,7 @@
 * @Author: Jei
 * @Date:   2017-12-11 12:20:29
 * @Last Modified by:   Jei
-* @Last Modified time: 2017-12-12 12:52:07
+* @Last Modified time: 2017-12-14 13:02:22
 */
 
 var mongoose = require('mongoose');
@@ -16,6 +16,7 @@ var userSchema = new Schema({
   telegram: {
     type: Schema.ObjectId,
     ref: 'TelegramUser',
+    unique: true,
   },
   group: {
     type: String,
@@ -23,9 +24,5 @@ var userSchema = new Schema({
     default: 'outsiders',
   }
 });
-
-userSchema.methods.isAdmin = function() {
-  return this.group == 'admin';
-};
 
 module.exports = userSchema;
