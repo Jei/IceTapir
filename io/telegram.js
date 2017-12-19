@@ -34,22 +34,16 @@ class Telegram extends require('./iodriver') {
     .then(async admins => {
       if (admins.length < 1) return Promise.resolve();
 
-      return Promise.all(admins.map(user => new Promise(async (resolve, reject) => {
-        let tUser;
+      return Promise.all(admins.map(user => {
+        // Catch any rejection from the single promise. We don't need to stop everything.
+        return TelegramUser.findOne({ _id: user.telegram })
+        .then(tUser => {
+          if (!tUser) return Promise.resolve();
 
-        try {
-          tUser = await TelegramUser.findOne({ _id: user.telegram });
-
-          if (!tUser) return resolve();
-
-          // TODO add markdown?
-          await this.output(tUser.id, msg);
-
-          resolve();
-        } catch(err) {
-          reject(err);
-        }
-      })));
+          return this.output(tUser.id, msg);
+        })
+        .catch(console.error);
+      }));
     });
   }
 
