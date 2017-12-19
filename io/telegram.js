@@ -26,7 +26,34 @@ class Telegram extends require('./iodriver') {
     });
   }
 
-  output(chatId, msg, opts) {
+  notifyUsersWithLevel(level = 999, msg) {
+    const { User, TelegramUser } = Memory.models;
+    let admins;
+
+    return User.find({ level: { $gt: level-1 } }).exec()
+    .then(async admins => {
+      if (admins.length < 1) return Promise.resolve();
+
+      return Promise.all(admins.map(user => new Promise(async (resolve, reject) => {
+        let tUser;
+
+        try {
+          tUser = await TelegramUser.findOne({ _id: user.telegram });
+
+          if (!tUser) return resolve();
+
+          // TODO add markdown?
+          await this.output(tUser.id, msg);
+
+          resolve();
+        } catch(err) {
+          reject(err);
+        }
+      })));
+    });
+  }
+
+  output(chatId, msg = {}, opts = {}) {
     console.io(TAG, chatId, msg);
     if (_.isString(msg)) msg = { text: msg };
 
@@ -40,7 +67,8 @@ class Telegram extends require('./iodriver') {
       return this.bot.sendPhoto(chatId, msg.photo, opts);
     }
 
-    return Promise.reject('No supported type found for the message: ' + JSON.stringify(msg));
+    console.warn('No supported type found for the message: ' + JSON.stringify(msg));
+    return Promise.resolve();
   }
 }
 

@@ -2,7 +2,7 @@
 * @Author: Jei
 * @Date:   2017-12-13 09:55:33
 * @Last Modified by:   Jei
-* @Last Modified time: 2017-12-14 16:13:22
+* @Last Modified time: 2017-12-19 10:23:41
 */
 
 const fs = require('fs');
@@ -41,7 +41,7 @@ class Help extends require('./command') {
         }
 
         resolve({
-          msg: parts.join('\n'),
+          msg: parts.length > 1 ? parts.join('\n') : "You have no commands available (yet) 🙃",
           opts: {
             parse_mode: 'Markdown',
           }

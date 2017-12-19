@@ -2,18 +2,10 @@
 * @Author: Jei
 * @Date:   2017-12-18 12:33:31
 * @Last Modified by:   Jei
-* @Last Modified time: 2017-12-18 12:45:46
+* @Last Modified time: 2017-12-19 11:18:55
 */
-const _ = require('underscore');
 
-Telegram.on('start', async (msg) => {
-  try {
-    const tUser = await Memory.updateTelegramUser(msg.from, { upsert: true });
-    console.info('Telegram user', tUser, 'started the bot.');
-  } catch(err) {
-    console.error(err);
-  }
-});
+const _ = require('underscore');
 
 // TODO move in a separate handler
 Telegram.on('message', async (msg) => {
@@ -47,7 +39,8 @@ Telegram.on('message', async (msg) => {
         const commandName = msg.text.substr(entity.offset+1, entity.length-1);
         const command = new (require(__basedir + '/commands/' + commandName))({ user });
 
-        result = await command.run(msg.text.substr(entity.offset+entity.length+1));
+        result = await command.run(msg, msg.text.substr(entity.offset+entity.length+1));
+        result = result || {};
         await Telegram.output(tUser.id, result.msg, result.opts);
       } catch(err) {
         // TODO standard response message

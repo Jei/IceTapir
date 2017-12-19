@@ -2,7 +2,7 @@
 * @Author: Jei
 * @Date:   2017-12-14 15:55:49
 * @Last Modified by:   Jei
-* @Last Modified time: 2017-12-14 16:53:00
+* @Last Modified time: 2017-12-19 10:06:04
 */
 
 function __formatSourceData(source = {}) {
@@ -28,7 +28,6 @@ class GetSources extends require('./command') {
         opts: {
           parse_mode: 'Markdown',
           disable_web_page_preview: true,
-
         },
       };
 
