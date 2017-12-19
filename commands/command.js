@@ -2,7 +2,7 @@
 * @Author: Jei
 * @Date:   2017-12-13 09:52:41
 * @Last Modified by:   Jei
-* @Last Modified time: 2017-12-14 16:13:30
+* @Last Modified time: 2017-12-19 10:50:34
 */
 
 class Command {
@@ -34,7 +34,7 @@ class Command {
       return Promise.reject('Unauthorized');
     }
 
-    return this.routine.call(this, arguments);
+    return this.routine.apply(this, arguments);
   }
 
   /**
