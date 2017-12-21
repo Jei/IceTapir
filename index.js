@@ -1,6 +1,6 @@
 const config = require('./config.json');
-const IODriver = require('./io/telegram');
 const AudioServer = require('./lib/icecast');
+const MemoryDriver = require('./memory');
 const _ = require('underscore');
 
 // Console log helper
@@ -21,6 +21,15 @@ const _ = require('underscore');
   };
 });
 
-// Initialize 
-global.Telegram = new IODriver(config.telegram);
+// Initialize
+global.__basedir = __dirname;
 global.Icecast = new AudioServer(config.icecast);
+global.Memory = new MemoryDriver(config);
+global.Bot = require('./bot');
+
+if (config.telegram.webhook != null) {
+	// TODO
+	throw new Error('Webhook not yet supported.');
+} else {
+	Bot.startPolling();
+}
