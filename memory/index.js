@@ -2,10 +2,11 @@
 * @Author: Jei
 * @Date:   2017-12-07 18:11:46
 * @Last Modified by:   Jei
-* @Last Modified time: 2017-12-14 15:05:49
+* @Last Modified time: 2017-12-21 17:14:38
 */
 
 const mongoose = require('mongoose');
+const _ = require('underscore');
 
 class Memory {
   constructor(cfg) {
@@ -34,7 +35,6 @@ class Memory {
         }
 
         const tUser = await this.updateTelegramUser({ id: telegram_id }, { upsert: true });
-
         user.telegram = tUser._id;
 
         await user.save();
@@ -46,20 +46,46 @@ class Memory {
     });
   }
 
-  updateUser(attrs = {}, options = { upsert: false, setDefaultsOnInsert: true, new: true }) {
+  updateUser(attrs = {}, options = {}) {
     const { username, ...restAttrs } = attrs;
+    _.defaults(options, {
+      upsert: false,
+      setDefaultsOnInsert: true,
+      new: true,
+    });
 
     if (username == null) return Promise.reject('Missing parameter "username"');
 
-    return this.models.User.findOneAndUpdate({ username }, restAttrs, options);
+    return this.models.User.findOneAndUpdate({ username }, restAttrs, options).exec();
   }
 
-  updateTelegramUser(attrs = {}, options = { upsert: false, setDefaultsOnInsert: true, new: true }) {
+  updateTelegramUser(attrs = {}, options = {}) {
     const { id, ...restAttrs } = attrs;
+    _.defaults(options, {
+      upsert: false,
+      setDefaultsOnInsert: true,
+      new: true,
+    });
 
     if (id == null) return Promise.reject('Missing parameter "id"');
 
-    return this.models.TelegramUser.findOneAndUpdate({ id }, restAttrs, options);
+    return this.models.TelegramUser.findByIdAndUpdate(id, restAttrs, options).exec();
+  }
+
+  findUserById(id) {
+    return this.models.User.findById(id).exec();
+  }
+
+  findUsersWithLevel(level = 0) {
+    return this.models.User.find({ level: { $gt: level-1 } }).exec();
+  }
+
+  findUserByTelegramId(id) {
+    return this.models.User.findOne({ telegram: id }).exec();
+  }
+
+  findTelegramUserById(id) {
+    return this.models.TelegramUser.findById(id).exec();
   }
 
 }

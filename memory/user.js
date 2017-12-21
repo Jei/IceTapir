@@ -2,7 +2,7 @@
 * @Author: Jei
 * @Date:   2017-12-11 12:20:29
 * @Last Modified by:   Jei
-* @Last Modified time: 2017-12-14 15:23:41
+* @Last Modified time: 2017-12-21 16:21:31
 */
 
 var mongoose = require('mongoose');
@@ -14,8 +14,7 @@ var userSchema = new Schema({
     unique: true,
   },
   telegram: {
-    type: Schema.ObjectId,
-    ref: 'TelegramUser',
+    type: Number,
     unique: true,
   },
   level: {
