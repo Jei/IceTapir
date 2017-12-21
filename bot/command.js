@@ -2,11 +2,11 @@
 * @Author: Jei
 * @Date:   2017-12-13 09:52:41
 * @Last Modified by:   Jei
-* @Last Modified time: 2017-12-19 10:50:34
+* @Last Modified time: 2017-12-21 16:24:00
 */
 
 class Command {
-  constructor(cfg = { user: {} }) {
+  constructor() {
     if (this.constructor === Command) {
       throw new TypeError('Cannot construct abstract class.');
     }
@@ -18,16 +18,14 @@ class Command {
     if (this.getDescription === Command.prototype.getDescription) {
       throw new TypeError('Please implement abstract method "getDescription".');
     }
-
-    this.user = cfg.user;
   }
 
   /**
    * Validate the current user's level and run this command's routine
    * @return {Promise} [description]
    */
-  run() {
-    const { username, level } = this.user || {};
+  run(ctx = {}) {
+    const { username, level } = ctx.user || {};
 
     if (!this.canRun(level)) {
       console.warn(`User "${username}" called the command "${commandName}" but is not authorized.`);
