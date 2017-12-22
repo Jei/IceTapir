@@ -1,5 +1,6 @@
 const config = require('./config.json');
 const AudioServer = require('./lib/icecast');
+const AudioClient = require('./liquidsoap');
 const MemoryDriver = require('./memory');
 const _ = require('underscore');
 
@@ -24,6 +25,7 @@ const _ = require('underscore');
 // Initialize
 global.__basedir = __dirname;
 global.Icecast = new AudioServer(config.icecast);
+global.Liquidsoap = new AudioClient(config);
 global.Memory = new MemoryDriver(config);
 global.Bot = require('./bot');
 
