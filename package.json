@@ -32,7 +32,6 @@
     "icecast-monitor": "^1.0.2",
     "mongoose": "^4.13.6",
     "telegraf": "^3.17.2",
-    "telegraf-flow": "^8.3.0",
     "telegraf-logger": "^2.0.2",
     "tgfancy": "^0.12.0",
     "underscore": "^1.8.3"

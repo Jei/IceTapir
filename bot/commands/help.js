@@ -2,14 +2,7 @@
 * @Author: Jei
 * @Date:   2017-12-21 14:21:55
 * @Last Modified by:   Jei
-* @Last Modified time: 2017-12-21 16:17:26
-*/
-
-/*
-* @Author: Jei
-* @Date:   2017-12-13 09:55:33
-* @Last Modified by:   Jei
-* @Last Modified time: 2017-12-19 10:23:41
+* @Last Modified time: 2018-01-17 19:13:47
 */
 
 const fs = require('fs');
@@ -40,4 +33,3 @@ class Help extends require('../command') {
 }
 
 module.exports = Help;
-
